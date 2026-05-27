@@ -1,0 +1,28 @@
+name: Auto Saudi Jobs Publisher
+
+on:
+  schedule:
+    # تشغيل تلقائي كل ساعة على مدار الساعة
+    - cron: '0 * * * *'
+  workflow_dispatch: # يتيح لكِ تشغيله يدوياً بضغطة زر من موقع GitHub لو أردتِ
+
+jobs:
+  publish-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-node-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install google-genai requests beautifulsoup4 google-auth-oauthlib google-api-python-client
+
+    - name: Run Processor Script
+      run: python ai_processor.py
